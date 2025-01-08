@@ -1,5 +1,6 @@
 This is a gstreamer plugin developed by UnlimitedIRL to support pulling H264 frames from DJI action cameras  
 
+We recommend looking at the BELABOX fork for up-to-date optimizations that may not be merged. https://github.com/BELABOX/gstlibuvch264src
 
 For Rockchip decode on kernel 5.10 use mppvideodec
 
