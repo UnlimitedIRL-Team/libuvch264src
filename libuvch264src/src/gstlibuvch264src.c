@@ -364,14 +364,9 @@ void frame_callback(uvc_frame_t *frame, void *ptr) {
 	GstBuffer *buffer = NULL;
 	if (nal_type == 5) {
 		gint new_bytes = frame->data_bytes + self->spspps_length;
-		gchar* new_frame = malloc(new_bytes);
-		memcpy(new_frame, self->spspps, self->spspps_length);
-		memcpy(new_frame + self->spspps_length, frame->data, frame->data_bytes);
-		
 		buffer = gst_buffer_new_allocate(NULL, new_bytes, NULL);
-		gst_buffer_fill(buffer, 0, new_frame, new_bytes);
-		
-		free(new_frame);
+		gst_buffer_fill(buffer, 0, self->spspps, self->spspps_length);
+		gst_buffer_fill(buffer, self->spspps_length, frame->data, frame->data_bytes);
 	}
 	else {
 		buffer = gst_buffer_new_allocate(NULL, frame->data_bytes, NULL);
