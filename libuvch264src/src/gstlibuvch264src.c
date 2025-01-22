@@ -232,19 +232,8 @@ static gboolean gst_libuvc_h264_src_start(GstBaseSrc *src) {
     GST_ERROR_OBJECT(self, "Failed to initialize libuvc: %s", uvc_strerror(res));
     return FALSE;
   }
-
-  /*
-  // Find the 1st UVC device
-  res = uvc_find_device(self->uvc_ctx, &self->uvc_dev, 0, 0, NULL);
-  if (res < 0) {
-    GST_ERROR_OBJECT(self, "Unable to find UVC device: %s", uvc_strerror(res));
-    uvc_exit(self->uvc_ctx);
-    return FALSE;
-  }
-  */
   
   uvc_device_t **dev_list;
-  //res = uvc_find_devices(self->uvc_ctx, &dev_list, 0, 0, NULL);
   res = uvc_find_devices(self->uvc_ctx, &dev_list, 0, 0, NULL);
   if (res < 0) {
     GST_ERROR_OBJECT(self, "Unable to find any UVC devices");
@@ -408,13 +397,6 @@ static GstFlowReturn gst_libuvc_h264_src_create(GstPushSrc *src, GstBuffer **buf
   }
 
   // Retrieve a buffer from the queue
-  /*
-  *buf = g_async_queue_timeout_pop(self->frame_queue, TIMEOUT_DURATION);
-  if (*buf == NULL) {
-    GST_ERROR_OBJECT(self, "No frame available within the timeout period.");
-    return GST_FLOW_OK;
-  }
-  */
   *buf = g_async_queue_pop(self->frame_queue);
   if (*buf == NULL) {
     GST_ERROR_OBJECT(self, "No frame available.");
