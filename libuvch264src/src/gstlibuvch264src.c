@@ -347,19 +347,21 @@ static gboolean gst_libuvc_h264_src_stop(GstBaseSrc *src) {
 void frame_callback(uvc_frame_t *frame, void *ptr) {
     GstLibuvcH264Src *self = (GstLibuvcH264Src *)ptr;
 
-    if (!frame || !frame->data || frame->data_bytes == 0) {
+    if (!frame || !frame->data || frame->data_bytes < 5) {
         GST_WARNING_OBJECT(self, "Empty or invalid frame received.");
         return;
     }
 	
 	unsigned char* data = frame->data;
+	if (data[0] != 0 || data[1] != 0 || data[2] != 0 || data[3] != 1) {
+	    GST_WARNING_OBJECT(self, "Invalid frame received.");
+        return;
+	}
 	int nal_type = (data[4] & 0x1F);
 	
 	// Parse SPS/PPS
-	if (data[0] == 0 && data[1] == 0 && data[2] == 0 && data[3] == 1) {
-		if (nal_type == 7 || nal_type == 8)
-			store_spspps(self, frame->data, frame->data_bytes, nal_type);
-	}
+	if (nal_type == 7 || nal_type == 8)
+		store_spspps(self, frame->data, frame->data_bytes, nal_type);
 	
 	GstBuffer *buffer = NULL;
 	if (nal_type == 5) {
