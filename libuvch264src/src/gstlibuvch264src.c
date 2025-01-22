@@ -245,7 +245,7 @@ static gboolean gst_libuvc_h264_src_start(GstBaseSrc *src) {
   
   uvc_device_t **dev_list;
   //res = uvc_find_devices(self->uvc_ctx, &dev_list, 0, 0, NULL);
-  res = uvc_find_devices(self->uvc_ctx, &dev_list, DJI_VENDOR_ID, DJI_PRODUCT_ID, NULL);
+  res = uvc_find_devices(self->uvc_ctx, &dev_list, 0, 0, NULL);
   if (res < 0) {
     GST_ERROR_OBJECT(self, "Unable to find any UVC devices");
     uvc_exit(self->uvc_ctx);
