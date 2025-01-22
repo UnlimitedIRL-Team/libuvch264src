@@ -32,6 +32,7 @@ struct _GstLibuvcH264Src {
   gint height;
   gint framerate;
   gint frame_count;
+  gboolean had_idr;
   unsigned char spspps[1024];
   gint spspps_length;
 };

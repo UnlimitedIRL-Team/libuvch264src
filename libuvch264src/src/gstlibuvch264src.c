@@ -367,6 +367,11 @@ void frame_callback(uvc_frame_t *frame, void *ptr) {
 		buffer = gst_buffer_new_allocate(NULL, new_bytes, NULL);
 		gst_buffer_fill(buffer, 0, self->spspps, self->spspps_length);
 		gst_buffer_fill(buffer, self->spspps_length, frame->data, frame->data_bytes);
+		
+		if (!self->had_idr)
+			self->had_idr = TRUE;
+	} else if (!self->had_idr) {
+		return;
 	}
 	else {
 		buffer = gst_buffer_new_allocate(NULL, frame->data_bytes, NULL);
