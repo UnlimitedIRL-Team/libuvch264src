@@ -138,7 +138,7 @@ void store_spspps(GstLibuvcH264Src *self, gchar* spspps, gint spspps_length, gin
 	// check PPS (integrated sps/pps)
 	if (nal_type == 7) {
 		int i;
-		for (i = 0; i < spspps_length; i++) {
+		for (i = 0; i < spspps_length - 4; i++) {
 			if (spspps[i] == 0 && spspps[i + 1] == 0 && spspps[i + 2] == 0 && spspps[i + 3] == 1 && (spspps[i + 4] & 0x1F) == 8) {
 				nal_type = 8;
 				break;
