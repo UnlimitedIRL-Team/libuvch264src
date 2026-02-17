@@ -8,13 +8,7 @@ gst_dep = dependency('gstreamer-1.0', version: '>=1.14')
 gst_base_dep = dependency('gstreamer-base-1.0', version: '>=1.14')
 libusb_dep = dependency('libusb-1.0', required: true)
 
-# Try system libuvc first, fall back to subproject with patches
-libuvc_dep = dependency('libuvc', required: false)
-
-if not libuvc_dep.found()
-  message('System libuvc not found, building from source with UVC 1.5 patch...')
-  libuvc_proj = subproject('libuvc')
-  libuvc_dep = libuvc_proj.get_variable('libuvc_dep')
-endif
+# Try system libuvc first (which should be available after CMake build), skip subproject
+libuvc_dep = dependency('libuvc', required: true)
 
 subdir('src')
