@@ -31,10 +31,10 @@ WORKDIR /src
 COPY . .
 
 # Build the project
-RUN cd libuvch264src && \
-    rm -rf buildDir && \
+RUN rm -rf buildDir && \
+    mkdir -p buildDir && \
     # First, build libuvc using its native CMake build system with patches applied \
-    cd subprojects && \
+    cd buildDir && \
     git clone https://github.com/libuvc/libuvc.git libuvc-build && \
     cd libuvc-build && \
     git checkout v0.0.7 && \
@@ -45,10 +45,10 @@ RUN cd libuvch264src && \
     make -j$(nproc) && \
     make install && \
     # Now build the main project \
-    cd /src/libuvch264src && \
+    cd /src && \
     meson setup buildDir && \
     meson compile -C buildDir
 
 # Default command: show build success and plugin info
-CMD ["bash", "-c", "echo 'Build successful!' && ls -la libuvch264src/buildDir/*.so 2>/dev/null || ls -la libuvch264src/buildDir/src/*.so"]
+CMD ["bash", "-c", "echo 'Build successful!' && ls -la buildDir/*.so 2>/dev/null || ls -la buildDir/src/*.so"]
 

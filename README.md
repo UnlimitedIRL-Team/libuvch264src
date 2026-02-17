@@ -42,7 +42,22 @@ sudo meson install -C build
 This project applies the following patches to upstream libuvc v0.0.7:
 - **UVC 1.5 support** (`uvc15-support.patch`): Adds support for UVC 1.5 specification devices
 
-Patches are located in `libuvch264src/subprojects/libuvc-patches/`
+Patches are located in `patches/uvc15-support.patch`
+
+The build process automatically:
+1. Downloads libuvc v0.0.7 from GitHub
+2. Applies the UVC 1.5 patch using CMake build system  
+3. Installs libuvc system-wide
+4. Builds the GStreamer plugin against the patched libuvc
+
+## Testing on macOS
+
+Since this is a Linux-only plugin, use Docker for testing:
+
+```bash
+# Build and test in Docker container
+sh test-build.sh
+```
 
 ### Manual Installation (if needed)
 
