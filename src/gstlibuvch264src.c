@@ -57,7 +57,7 @@ static void gst_libuvc_h264_src_class_init(GstLibuvcH264SrcClass *klass) {
 
   gst_element_class_set_static_metadata(element_class,
     "UVC H.264 Video Source", "Source/Video",
-    "Captures H.264 video from a UVC device", "Name");
+    "Captures H.264 video from a UVC device", "UnlimitedIRL <https://github.com/UnlimitedIRL-Team>");
 
   gst_element_class_add_pad_template(element_class,
     gst_static_pad_template_get(&src_template));
@@ -619,7 +619,7 @@ static gboolean plugin_init(GstPlugin *plugin) {
 
 // Define the plugin using GST_PLUGIN_DEFINE
 #define PACKAGE "libuvch264src"
-#define VERSION "1.0"
+#define VERSION "1.1"
 GST_PLUGIN_DEFINE(
     GST_VERSION_MAJOR,
     GST_VERSION_MINOR,
@@ -628,6 +628,6 @@ GST_PLUGIN_DEFINE(
     plugin_init,
     VERSION,
     "LGPL",
-    "GStreamer",
-    "https://gstreamer.freedesktop.org/"
+    "libuvch264src",
+    "https://github.com/UnlimitedIRL-Team/libuvch264src"
 )
