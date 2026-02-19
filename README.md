@@ -1,4 +1,4 @@
-This is a gstreamer plugin developed by UnlimitedIRL to support pulling H264 frames from DJI action cameras  
+This is a gstreamer plugin developed by UnlimitedIRL to support pulling H264 frames from DJI action cameras
 
 We recommend looking at the BELABOX fork for up-to-date optimizations that may not be merged. https://github.com/BELABOX/gstlibuvch264src
 
@@ -6,63 +6,49 @@ For Rockchip decode on kernel 5.10 use mppvideodec
 
 for Rockchip decode on kernel 6.6 use v4l2slh264dec
 
-Example pipeline to send frames to HDMI output: 
+Example pipeline to send frames to HDMI output:
 
-```bash
+```
 gst-launch-1.0 libuvch264src index=0 ! video/x-h264,width=1920,height=1080,framerate=30/1 ! queue ! h264parse ! queue ! v4l2slh264dec ! queue ! videoconvert ! kmssink
 ```
 
-## Build Steps
+# Installation guide
 
-### Dependencies
+## Patch libuvc
+libuvc library does not support UVC 1.5 which is required to pull H264 frames from DJI action cameras. A patch is required to bypass the UVC 1.5 check and allow the camera to be used as a standard UVC device. 
+The patch is included in this repository and can be applied to the libuvc source code and compiled/installed in this way:
 
-```bash
-# Debian/Ubuntu
-sudo apt install build-essential meson pkg-config git
-sudo apt install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
-sudo apt install libusb-1.0-0-dev libjpeg-dev
+```
+# Prepare temporary buildfolder
+mkdir /tmp/libuvc
+cd /tmp/libuvc
 
-# macOS
-brew install meson pkg-config gstreamer gst-plugins-base libusb jpeg
+# Download libuvc source code
+git clone https://github.com/libuvc/libuvc.git .
+
+# Ensure we are on the correct version (the patch is only tested with v0.0.7)
+git checkout v0.0.7
+
+# Download and apply the patch
+wget https://raw.githubusercontent.com/UnlimitedIRL/gstlibuvch264src/main/patches/uvc15-support.patch
+patch -p1 < uvc15-support.patch
+
+# Build and install the patched libuvc
+cmake .
+make
+sudo make install
 ```
 
-### Build
+## Install the plugin
+```
+# Create temporary buildfolder
+mkdir build
 
-The build system will automatically download and patch libuvc from upstream if not installed on the system.
-
-```bash
-cd libuvch264src
+# Compile the plugin binary
 meson setup build
 meson compile -C build
-sudo meson install -C build
+
+# Move plugin from buildfolder to plugin-folder
+sudo mv build/libgstlibuvch264src.so /lib/aarch64-linux-gnu/gstreamer-1.0/
+
 ```
-
-### libuvc Patches
-
-This project applies the following patches to upstream libuvc v0.0.7:
-- **UVC 1.5 support** (`uvc15-support.patch`): Adds support for UVC 1.5 specification devices
-
-Patches are located in `patches/uvc15-support.patch`
-
-The build process automatically:
-1. Downloads libuvc v0.0.7 from GitHub
-2. Applies the UVC 1.5 patch using CMake build system  
-3. Installs libuvc system-wide
-4. Builds the GStreamer plugin against the patched libuvc
-
-## Testing on macOS
-
-Since this is a Linux-only plugin, use Docker for testing:
-
-```bash
-# Build and test in Docker container
-sh test-build.sh
-```
-
-### Manual Installation (if needed)
-
-```bash
-# Move plugin to GStreamer plugin directory (adjust path for your architecture)
-sudo mv /usr/local/lib/$(uname -m)-linux-gnu/gstreamer-1.0/libgstlibuvch264src.so /lib/$(uname -m)-linux-gnu/gstreamer-1.0/
-```
-

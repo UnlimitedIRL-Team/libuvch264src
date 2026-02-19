@@ -50,5 +50,5 @@ RUN rm -rf buildDir && \
     meson compile -C buildDir
 
 # Default command: show build success and plugin info
-CMD ["bash", "-c", "echo 'Build successful!' && echo '' && echo '🔌 Plugin information:' && GST_PLUGIN_PATH=/src/buildDir/src gst-inspect-1.0 libuvch264src || echo 'Plugin inspection failed - checking build output:' && ls -la buildDir/src/*.so"]
+CMD ["bash", "-c", "echo 'Build successful!' && echo '' && echo '🔌 Plugin information:' && GST_PLUGIN_PATH=/src/buildDir/src gst-inspect-1.0 libuvch264src || echo 'Plugin inspection failed - checking build output:' && ls -lah buildDir/src/*.so"]
 
