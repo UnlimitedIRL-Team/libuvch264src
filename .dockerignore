@@ -1,0 +1,17 @@
+# Docker build artifacts
+buildDir/
+
+# IDE files
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Build outputs
+*.o
+*.so
+*.a
+

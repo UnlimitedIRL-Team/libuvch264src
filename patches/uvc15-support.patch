@@ -1,0 +1,11 @@
+--- a/src/device.c
++++ b/src/device.c
+@@ -1139,6 +1139,8 @@ uvc_error_t uvc_parse_vc_header(uvc_device_t *dev,
+     break;
+   case 0x0110:
+     break;
++  case 0x0150:
++    break;
+   default:
+     UVC_DEBUG("device reports UVC version %04x, but we only support 0100-0110. Assuming 0110.", info->ctrl_if.bcdUVC);
+     info->ctrl_if.bcdUVC = 0x0110;
