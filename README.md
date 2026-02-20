@@ -30,7 +30,7 @@ git clone https://github.com/libuvc/libuvc.git .
 git checkout v0.0.7
 
 # Download and apply the patch
-wget https://raw.githubusercontent.com/UnlimitedIRL/gstlibuvch264src/main/patches/uvc15-support.patch
+wget https://raw.githubusercontent.com/UnlimitedIRL-Team/libuvch264src/refs/heads/dev/patches/uvc15-support.patch
 patch -p1 < uvc15-support.patch
 
 # Build and install the patched libuvc
