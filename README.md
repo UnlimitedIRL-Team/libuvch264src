@@ -4,6 +4,8 @@ A GStreamer source plugin for pulling H.264-encoded video from UVC cameras over 
 
 > **Note: this is the `experimental` branch.** It carries fixes that have not yet landed on `main` and are still being validated in the field. It may be more unstable than `main` — expect rough edges, log spam, and the occasional regression. If you don't specifically need the workarounds described below, use `main` instead.
 
+We recommend looking at the BELABOX fork for up-to-date optimizations that may not be merged. https://github.com/BELABOX/gstlibuvch264src
+
 ## What this plugin solves for DJI cameras
 
 DJI action cameras can expose an H.264 stream over USB when switched into UVC mode, but they don't behave like a typical UVC webcam. This plugin works around three separate issues that otherwise make the cameras unusable, especially on Rockchip SBCs:
