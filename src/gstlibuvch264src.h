@@ -12,6 +12,8 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE(GstLibuvcH264Src, gst_libuvc_h264_src, GST, LIBUVC_H264_SRC, GstPushSrc)
 
 #define DEFAULT_DEVICE_INDEX "0"
+#define DEFAULT_USB_BUS -1
+#define DEFAULT_USB_DEVICE_ADDRESS -1
 #define TIMEOUT_DURATION G_TIME_SPAN_SECOND // 1 second
 #define DJI_VENDOR_ID 0x2ca3
 #define DJI_PRODUCT_ID 0x0023
@@ -23,9 +25,12 @@ G_DECLARE_FINAL_TYPE(GstLibuvcH264Src, gst_libuvc_h264_src, GST, LIBUVC_H264_SRC
 struct _GstLibuvcH264Src {
   GstPushSrc parent_instance;
   gchar* index;
+  gint usb_bus;
+  gint usb_device_address;
   uvc_context_t *uvc_ctx;
   uvc_device_t *uvc_dev;
   uvc_device_handle_t *uvc_devh;
+  int usb_devnode_fd;             /* fd from open("/dev/bus/usb/..."), used with uvc_wrap */
   uvc_stream_ctrl_t uvc_ctrl;
   GAsyncQueue *frame_queue;
   gboolean streaming;
@@ -40,6 +45,11 @@ struct _GstLibuvcH264Src {
   gint pps_length;
   unsigned char sps[SPSPPSBUFSZ];
   unsigned char pps[SPSPPSBUFSZ];
+  gint warmup_frames;        /* GStreamer property: frames to drop (default 90) */
+  gint warmup_count;         /* runtime counter: UVC frames received so far */
+  gboolean warmup_done;      /* TRUE after warmup_count >= warmup_frames */
+  gint negotiated_width;     /* UVC-negotiated width (from caps) */
+  gint negotiated_height;    /* UVC-negotiated height (from caps) */
 };
 
 G_END_DECLS

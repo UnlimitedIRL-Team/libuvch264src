@@ -6,7 +6,7 @@ sources = [
 ]
 
 shared_library(library_name, sources,
-  dependencies: [gst_dep, gst_base_dep, libuvc_dep, libusb_dep],
+  dependencies: [gst_dep, gst_base_dep, libusb_dep, libuvc_dep],
   install: true,
   install_dir: join_paths(get_option('libdir'), 'gstreamer-1.0')
 )

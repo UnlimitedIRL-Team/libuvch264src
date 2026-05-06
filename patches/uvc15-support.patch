@@ -1,0 +1,25 @@
+diff --git a/src/device.c b/src/device.c
+index f8113cc..cfb5eee 100644
+--- a/src/device.c
++++ b/src/device.c
+@@ -296,6 +296,11 @@ uvc_error_t uvc_wrap(
+     return err;
+   }
+ 
++  /* Auto-detach any kernel driver (e.g. uvcvideo) when we claim interfaces.
++   * Without this, uvc_open_internal will fail because the
++   * kernel driver is still bound to the device UVC interfaces. */
++  libusb_set_auto_detach_kernel_driver(usb_devh, 1);
++
+   dev = calloc(1, sizeof(uvc_device_t));
+   dev->ctx = context;
+   dev->usb_dev = libusb_get_device(usb_devh);
+@@ -1138,6 +1143,8 @@ uvc_error_t uvc_parse_vc_header(uvc_device_t *dev,
+     break;
+   case 0x0110:
+     break;
++  case 0x0150:
++    break;
+   default:
+     UVC_EXIT(UVC_ERROR_NOT_SUPPORTED);
+     return UVC_ERROR_NOT_SUPPORTED;
